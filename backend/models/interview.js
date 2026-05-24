@@ -9,10 +9,13 @@ const interviewSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    resumeText: {
+        type: String
+    },
     status: {
         type: String,
         enum: ['InProgress', 'Completed'],
-        default: InProgress
+        default: 'InProgress'
     },
     transcript: [{
         role: {
@@ -32,7 +35,7 @@ const interviewSchema = new mongoose.Schema({
     
     evaluation: {
         overallScore: { type: Number, min: 0, max: 100},
-        technicalAccuracy: { type: Numbner, min: 0, max: 100},
+        technicalAccuracy: { type: Number, min: 0, max: 100},
         communicationSkill: {type: Number, min: 0, max: 100},
         strengths: [{ type: String }],
         detailedFeedback: { type: String }
