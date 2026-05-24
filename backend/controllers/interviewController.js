@@ -23,7 +23,7 @@ const generateMockId = () => {
 };
 
 /**
- * 1. Start a new interview session
+ * 1. Start a new interview session (associated with logged-in User)
  */
 const startInterview = async (req, res) => {
     try {
@@ -34,11 +34,11 @@ const startInterview = async (req, res) => {
         }
 
         // Generate the first technical question using Gemini/Mock service
-        // Empty history since this is the first turn
         const firstQuestion = await generateQuestion(targetRole, resumeText || "", []);
 
         const interviewData = {
             candidateName,
+            user: req.user._id, // Hooked up user association!
             targetRole,
             resumeText: resumeText || "",
             status: 'InProgress',
@@ -82,7 +82,7 @@ const startInterview = async (req, res) => {
 };
 
 /**
- * 2. Accept candidate's response and progress the interview
+ * 2. Accept candidate's response and progress the interview (Protected)
  */
 const respondToInterview = async (req, res) => {
     try {
@@ -111,22 +111,25 @@ const respondToInterview = async (req, res) => {
             return res.status(404).json({ error: "Interview session not found." });
         }
 
-        if (interview.status === 'Completed') {
-            return res.status(400).json({ error: "This interview session has already been completed and evaluated." });
+        // Security check: Verify the interview belongs to the logged-in user!
+        const interviewUserStr = interview.user ? interview.user.toString() : '';
+        const loggedUserStr = req.user._id ? req.user._id.toString() : '';
+        
+        if (interviewUserStr && interviewUserStr !== loggedUserStr) {
+            return res.status(403).json({ error: "Not authorized: you do not own this interview session." });
         }
 
-        // 1. Append the user's response to the transcript
+        if (interview.status === 'Completed') {
+            return res.status(400).json({ error: "This interview session has already been completed." });
+        }
+
+        // 1. Append user response
         const userTurn = {
             role: 'user',
             content: answer,
             timestamp: new Date()
         };
-
-        if (id.startsWith('mock_') || !isDbConnected()) {
-            interview.transcript.push(userTurn);
-        } else {
-            interview.transcript.push(userTurn);
-        }
+        interview.transcript.push(userTurn);
 
         // 2. Count current number of assistant questions asked so far
         const questionCount = interview.transcript.filter(t => t.role === 'assistant').length;
@@ -145,7 +148,11 @@ const respondToInterview = async (req, res) => {
                 interview.updatedAt = new Date();
                 inMemoryStore.set(id, interview);
             } else {
-                await interview.save();
+                await Interview.findByIdAndUpdate(id, { 
+                    status: 'Completed', 
+                    transcript: interview.transcript,
+                    evaluation: interview.evaluation 
+                });
             }
 
             return res.status(200).json({
@@ -167,14 +174,15 @@ const respondToInterview = async (req, res) => {
                 content: nextQuestion,
                 timestamp: new Date()
             };
+            interview.transcript.push(assistantTurn);
 
             if (id.startsWith('mock_') || !isDbConnected()) {
-                interview.transcript.push(assistantTurn);
                 interview.updatedAt = new Date();
                 inMemoryStore.set(id, interview);
             } else {
-                interview.transcript.push(assistantTurn);
-                await interview.save();
+                await Interview.findByIdAndUpdate(id, { 
+                    transcript: interview.transcript 
+                });
             }
 
             return res.status(200).json({
@@ -191,7 +199,7 @@ const respondToInterview = async (req, res) => {
 };
 
 /**
- * 3. Retrieve a single interview details (with evaluation)
+ * 3. Retrieve a single interview details (Protected)
  */
 const getInterview = async (req, res) => {
     try {
@@ -213,6 +221,14 @@ const getInterview = async (req, res) => {
             return res.status(404).json({ error: "Interview session not found." });
         }
 
+        // Security check: Verify the interview belongs to the logged-in user
+        const interviewUserStr = interview.user ? interview.user.toString() : '';
+        const loggedUserStr = req.user._id ? req.user._id.toString() : '';
+        
+        if (interviewUserStr && interviewUserStr !== loggedUserStr) {
+            return res.status(403).json({ error: "Not authorized to access this interview." });
+        }
+
         return res.status(200).json({ interview });
     } catch (error) {
         console.error("Error in getInterview:", error.message);
@@ -221,26 +237,33 @@ const getInterview = async (req, res) => {
 };
 
 /**
- * 4. List all past interviews (history dashboard)
+ * 4. List all past interviews of the logged-in user (Protected)
  */
 const listInterviews = async (req, res) => {
     try {
         let dbInterviews = [];
+        const loggedUserStr = req.user._id ? req.user._id.toString() : '';
+
         if (isDbConnected()) {
             try {
-                // Return sorted by most recent
-                dbInterviews = await Interview.find().sort({ createdAt: -1 });
+                // Return sorted by most recent, filtered by logged-in user!
+                dbInterviews = await Interview.find({ user: req.user._id }).sort({ createdAt: -1 });
             } catch (dbError) {
                 console.error("Failed to fetch interviews from MongoDB:", dbError.message);
             }
         }
 
-        // Merge with in-memory sessions, sorted by date
-        const localInterviews = Array.from(inMemoryStore.values());
+        // Filter local in-memory sessions by logged-in user!
+        const localInterviews = Array.from(inMemoryStore.values()).filter(item => {
+            const itemUserStr = item.user ? item.user.toString() : '';
+            return itemUserStr === loggedUserStr;
+        });
+
+        // Merge and sort
         const merged = [...dbInterviews, ...localInterviews].sort((a, b) => {
             const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
             const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
-            return dateB - dateA; // descending order
+            return dateB - dateA;
         });
 
         return res.status(200).json({ interviews: merged });

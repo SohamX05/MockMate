@@ -29,7 +29,10 @@ const connectDB = async () => {
 connectDB();
 
 // API Endpoints
+const authRoutes = require('./routes/authRoutes');
 const interviewRoutes = require('./routes/interviewRoutes');
+
+app.use('/api/auth', authRoutes);
 app.use('/api/interviews', interviewRoutes);
 
 app.get("/api/status", (req, res) => {
