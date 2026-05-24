@@ -4,8 +4,8 @@ import Dashboard from './Dashboard';
 import InterviewRoom from './InterviewRoom';
 import EvaluationReport from './EvaluationReport';
 
-// API Base (Vite server handles proxy to port 5000 in dev)
-const API_BASE = '';
+// API Base (Vite server handles proxy to port 5000 in dev; Vercel loads dynamic API base URL)
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
 export default function App() {
   // Authentication states
