@@ -2,16 +2,15 @@ services:
   - type: web
     name: mockmate-api
     env: node
-    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: PORT
-        value: 5000
+        value: "5000"
       - key: MONGO_URI
-        sync: true # Prompts the user for their Mongo connection string on click!
+        sync: true
       - key: GEMINI_API_KEY
-        sync: true # Prompts the user for their Gemini API key on click!
+        sync: true
       - key: JWT_SECRET
-        generateValue: true # Generates a secure secure secret automatically!
+        generateValue: true
