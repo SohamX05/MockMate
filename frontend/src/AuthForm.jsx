@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 
-// Dynamic API Base detection for dev or production
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000'
-  : '';
+// API Base (Vite server handles proxy to port 5000 in dev)
+const API_BASE = '';
 
 export default function AuthForm({ onAuthSuccess }) {
   // Views: 'LOGIN' | 'REGISTER' | 'RESET_REQUEST' | 'RESET_PASSWORD'

@@ -4,9 +4,8 @@ import Dashboard from './Dashboard';
 import InterviewRoom from './InterviewRoom';
 import EvaluationReport from './EvaluationReport';
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000'
-  : '';
+// API Base (Vite server handles proxy to port 5000 in dev)
+const API_BASE = '';
 
 export default function App() {
   // Authentication states
