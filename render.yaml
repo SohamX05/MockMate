@@ -1,16 +1,15 @@
 services:
   - type: web
     name: mockmate-api
-    env: node
+    runtime: node
+    plan: free
     rootDir: backend
-    buildCommand: npm install
+    buildCommand: npm ci
     startCommand: npm start
     envVars:
-      - key: PORT
-        value: "5000"
       - key: MONGO_URI
-        value: "mongodb+srv://Soham:Soham2005@cluster0.6ewppht.mongodb.net/?appName=Cluster0"
+        sync: false
       - key: GEMINI_API_KEY
-        value: "AIzaSyDPM4WxEVgxgfviIgp5s8smMxUslBH8u9g"
+        sync: false
       - key: JWT_SECRET
         generateValue: true
