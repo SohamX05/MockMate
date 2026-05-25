@@ -9,8 +9,8 @@ services:
       - key: PORT
         value: "5000"
       - key: MONGO_URI
-        sync: true
+        value: "mongodb+srv://Soham:Soham2005@cluster0.6ewppht.mongodb.net/?appName=Cluster0"
       - key: GEMINI_API_KEY
-        sync: true
+        value: "AIzaSyDPM4WxEVgxgfviIgp5s8smMxUslBH8u9g"
       - key: JWT_SECRET
         generateValue: true

@@ -217,19 +217,42 @@ export default function EvaluationReport({ activeInterview, onBackToDashboard })
           <div className="transcript-review-panel">
             <h3>Full Conversation Transcript</h3>
             <div className="transcript-review-list">
-              {activeInterview.transcript && activeInterview.transcript.map((turn, index) => (
-                <div key={index} className="transcript-turn">
-                  <div className={`turn-header ${turn.role}`}>
-                    <span>{turn.role === 'assistant' ? 'Interviewer (MockMate AI)' : 'Candidate (You)'}</span>
-                    <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>
-                      {turn.timestamp ? new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                    </span>
+              {activeInterview.transcript && activeInterview.transcript.map((turn, index) => {
+                const isAssistant = turn.role === 'assistant';
+                return (
+                  <div 
+                    key={index} 
+                    className="transcript-turn" 
+                    style={{ 
+                      border: isAssistant ? '1px solid rgba(139, 92, 246, 0.25)' : '1px solid rgba(6, 182, 212, 0.25)', 
+                      boxShadow: isAssistant ? '0 4px 20px rgba(139, 92, 246, 0.05)' : '0 4px 20px rgba(6, 182, 212, 0.05)',
+                      background: isAssistant ? 'rgba(139, 92, 246, 0.01)' : 'rgba(6, 182, 212, 0.01)',
+                      animation: 'cardScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+                      animationDelay: `${index * 0.05}s`
+                    }}
+                  >
+                    <div 
+                      className={`turn-header ${turn.role}`}
+                      style={{
+                        background: isAssistant ? 'rgba(139, 92, 246, 0.1)' : 'rgba(6, 182, 212, 0.1)',
+                        color: isAssistant ? 'var(--accent)' : 'var(--secondary)',
+                        borderBottom: isAssistant ? '1px solid rgba(139, 92, 246, 0.2)' : '1px solid rgba(6, 182, 212, 0.2)',
+                        padding: '12px 18px',
+                        fontFamily: 'var(--font-heading)',
+                        fontWeight: 700
+                      }}
+                    >
+                      <span>{isAssistant ? 'Interviewer (MockMate AI)' : 'Candidate (You)'}</span>
+                      <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>
+                        {turn.timestamp ? new Date(turn.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                      </span>
+                    </div>
+                    <div className="turn-content" style={{ padding: '18px 20px', fontSize: '0.92rem', color: 'var(--text-primary)', lineHeight: '1.65' }}>
+                      {turn.content}
+                    </div>
                   </div>
-                  <div className="turn-content">
-                    {turn.content}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

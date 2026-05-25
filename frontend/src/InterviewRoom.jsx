@@ -134,12 +134,12 @@ export default function InterviewRoom({
 
   return (
     <div className="interview-layout">
-      {/* Sidebar - Simplistic Status Grid */}
+      {/* Sidebar - Visual Status Grid */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         
         {/* Sleek Interviewer Card */}
         <div className={`avatar-panel ${isRecording ? 'wave-active' : ''}`}>
-          <div className="avatar-indicator-box">
+          <div className="avatar-indicator-box" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.15))' }}>
             <div className="listening-pulse-dot"></div>
             {/* Elegant SVG outline for AI interviewer */}
             <svg className="minimal-avatar-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -148,25 +148,45 @@ export default function InterviewRoom({
           </div>
           
           <div className="interviewer-info">
-            <h3>MockMate Bot</h3>
-            <span className="interviewer-role">
+            <h3 style={{ fontFamily: 'var(--font-heading)' }}>MockMate Bot</h3>
+            <span className="interviewer-role" style={{ color: isRecording ? 'var(--danger)' : 'var(--secondary)' }}>
               {isRecording ? 'Listening...' : 'Active Session'}
             </span>
           </div>
+        </div>
+
+        {/* Live CSS Audio frequency waveform visualizer */}
+        <div className={`waveform-canvas ${isRecording ? 'wave-active' : ''}`} style={{ background: 'rgba(12, 13, 20, 0.4)', boxShadow: 'inset 0 0 12px rgba(0,0,0,0.4)' }}>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
+          <div className="wave-bar"></div>
         </div>
 
         {/* Progress Display */}
         <div className="progress-container glass-card" style={{ padding: '24px' }}>
           <div className="progress-label">
             <span>Round Progress</span>
-            <span style={{ fontWeight: 600, color: 'var(--primary)' }}>
+            <span style={{ fontWeight: 700, color: 'var(--primary)' }}>
               Q{Math.min(5, currentQuestionNumber)} / 5
             </span>
           </div>
-          <div className="progress-bar-bg">
+          <div className="progress-bar-bg" style={{ height: '8px', borderRadius: '4px' }}>
             <div 
               className="progress-bar-fill" 
-              style={{ width: `${(Math.min(5, currentQuestionNumber) / 5) * 100}%` }}
+              style={{ width: `${(Math.min(5, currentQuestionNumber) / 5) * 100}%`, height: '100%', borderRadius: '4px' }}
             ></div>
           </div>
         </div>
@@ -174,10 +194,10 @@ export default function InterviewRoom({
         {/* Timer Card */}
         <div className="glass-card" style={{ padding: '20px' }}>
           <div className="timer">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: 'var(--secondary)' }}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Time Elapsed: <strong>{formatTime(secondsElapsed)}</strong></span>
+            <span style={{ fontSize: '0.85rem' }}>Time Elapsed: <strong style={{ color: '#fff' }}>{formatTime(secondsElapsed)}</strong></span>
           </div>
         </div>
       </div>
@@ -185,9 +205,9 @@ export default function InterviewRoom({
       {/* Main chat box */}
       <div className="chat-board">
         {/* Minimal Question box */}
-        <div className="glass-card question-box">
-          <div className="question-header">Interviewer Question</div>
-          <div className="question-text">
+        <div className="glass-card question-box" style={{ borderLeft: '4px solid var(--primary)', background: 'rgba(99, 102, 241, 0.02)' }}>
+          <div className="question-header" style={{ fontFamily: 'var(--font-heading)', fontWeight: 800 }}>Interviewer Question</div>
+          <div className="question-text" style={{ fontSize: '1.15rem', color: '#fff', fontWeight: 500 }}>
             {loading && !latestQuestion ? (
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center', color: 'var(--text-secondary)' }}>
                 <svg width="16" height="16" viewBox="0 0 38 38" stroke="var(--primary)" style={{ animation: 'orbLiquid 1s linear infinite' }}>
@@ -208,7 +228,7 @@ export default function InterviewRoom({
 
         {/* Answer textarea box */}
         <div className="glass-card response-box">
-          <div className="question-header" style={{ color: 'var(--text-secondary)' }}>Your Answer</div>
+          <div className="question-header" style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>Your Answer</div>
           
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="input-container">
@@ -217,8 +237,14 @@ export default function InterviewRoom({
                 placeholder="Compose your structured technical answer here. You can also click the microphone to speak..."
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.ctrlKey) {
+                    handleSubmit(e);
+                  }
+                }}
                 disabled={loading}
                 required
+                style={{ fontSize: '1rem', background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-color)', color: '#fff' }}
               />
 
               <button
@@ -240,17 +266,40 @@ export default function InterviewRoom({
 
             {/* Speaking voice overlay */}
             {isRecording && interimTranscript && (
-              <div className="transcript-preview">
-                <span style={{ color: 'var(--danger)', fontWeight: 600 }}>Speaking: </span>
+              <div className="transcript-preview" style={{ background: 'rgba(239, 68, 68, 0.03)', border: '1px dashed rgba(239, 68, 68, 0.2)' }}>
+                <span style={{ color: 'var(--danger)', fontWeight: 700 }}>Speaking: </span>
                 {interimTranscript}
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {/* Floating Workspace Toolbar */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              background: 'rgba(255, 255, 255, 0.02)', 
+              padding: '12px 18px', 
+              borderRadius: '8px', 
+              border: '1px solid var(--border-color)',
+              fontSize: '0.8rem',
+              color: 'var(--text-secondary)'
+            }}>
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <span>Words: <strong style={{ color: '#fff' }}>{answer.trim() ? answer.trim().split(/\s+/).filter(Boolean).length : 0}</strong></span>
+                <span>Characters: <strong style={{ color: '#fff' }}>{answer.length}</strong></span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.7rem', background: 'rgba(255, 255, 255, 0.06)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(255, 255, 255, 0.08)', fontWeight: 700, color: '#fff' }}>Ctrl + Enter</span>
+                <span>to submit</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '4px' }}>
               <button 
                 type="submit" 
                 className="btn btn-primary"
                 disabled={loading || !answer.trim()}
+                style={{ padding: '12px 28px' }}
               >
                 {loading ? (
                   <>

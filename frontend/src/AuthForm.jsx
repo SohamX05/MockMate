@@ -168,14 +168,45 @@ export default function AuthForm({ onAuthSuccess }) {
   };
 
   return (
-    <div style={{ maxWidth: '420px', width: '100%', margin: '40px auto' }}>
-      <div className="glass-card" style={{ padding: '40px 32px' }}>
+    <div style={{ maxWidth: '420px', width: '100%', margin: '60px auto' }}>
+      <div className="glass-card" style={{ padding: '48px 36px', boxShadow: '0 24px 64px rgba(0,0,0,0.8), 0 0 80px rgba(99, 102, 241, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.06)' }}>
         
-        {/* Brand Shell */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <div className="logo-icon" style={{ margin: '0 auto 12px auto', width: '36px', height: '36px', fontSize: '1.35rem' }}>M</div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>MockMate</h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+        {/* Brand Shell with Glowing Security Lock */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ 
+            margin: '0 auto 16px auto', 
+            width: '54px', 
+            height: '54px', 
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 0 25px rgba(99, 102, 241, 0.4)',
+            color: '#fff',
+            animation: 'cardScaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both'
+          }}>
+            {view === 'LOGIN' || view === 'RESET_PASSWORD' ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            ) : view === 'REGISTER' ? (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="8.5" cy="7" r="4"></circle>
+                <line x1="20" y1="8" x2="20" y2="14"></line>
+                <line x1="23" y1="11" x2="17" y2="11"></line>
+              </svg>
+            ) : (
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 2v6h-6"></path>
+                <path d="M21 13a9 9 0 1 1-3-7.7L21 8"></path>
+              </svg>
+            )}
+          </div>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 800, fontFamily: 'var(--font-heading)', background: 'linear-gradient(to right, #ffffff, var(--text-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>MockMate</h2>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '6px', fontWeight: 500 }}>
             {view === 'LOGIN' && 'Sign in to access your interview dashboard'}
             {view === 'REGISTER' && 'Create your account to start mock assessments'}
             {view === 'RESET_REQUEST' && 'Reset your candidate password'}
@@ -186,31 +217,43 @@ export default function AuthForm({ onAuthSuccess }) {
         {/* Alert Dialog Boxes */}
         {error && (
           <div style={{
-            background: 'rgba(239, 68, 68, 0.08)',
+            background: 'rgba(239, 68, 68, 0.06)',
             border: '1px solid rgba(239, 68, 68, 0.15)',
             color: 'var(--danger)',
-            fontSize: '0.85rem',
+            fontSize: '0.82rem',
             padding: '12px 16px',
             borderRadius: '8px',
-            marginBottom: '20px',
-            lineHeight: '1.4'
+            marginBottom: '24px',
+            lineHeight: '1.4',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
           }}>
-            {error}
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ flexShrink: 0 }}>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
         {success && (
           <div style={{
-            background: 'rgba(16, 185, 129, 0.08)',
+            background: 'rgba(16, 185, 129, 0.06)',
             border: '1px solid rgba(16, 185, 129, 0.15)',
             color: 'var(--success)',
-            fontSize: '0.85rem',
+            fontSize: '0.82rem',
             padding: '12px 16px',
             borderRadius: '8px',
-            marginBottom: '20px',
-            lineHeight: '1.4'
+            marginBottom: '24px',
+            lineHeight: '1.4',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
           }}>
-            {success}
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ flexShrink: 0 }}>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{success}</span>
           </div>
         )}
 
@@ -221,16 +264,25 @@ export default function AuthForm({ onAuthSuccess }) {
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label className="form-label" htmlFor="login-email">Email Address</label>
-              <input
-                type="email"
-                id="login-email"
-                className="form-input"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="login-email"
+                  className="form-input"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <div className="form-group">
@@ -239,12 +291,18 @@ export default function AuthForm({ onAuthSuccess }) {
                 <button 
                   type="button" 
                   onClick={() => switchView('RESET_REQUEST')}
-                  style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: '0.8rem', cursor: 'pointer', outline: 'none' }}
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', outline: 'none', transition: 'color var(--transition-fast)' }}
                 >
                   Forgot Password?
                 </button>
               </div>
               <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="login-pass"
@@ -254,12 +312,26 @@ export default function AuthForm({ onAuthSuccess }) {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
-                  style={{ paddingRight: '44px' }}
+                  style={{ paddingLeft: '44px', paddingRight: '48px' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', outline: 'none' }}
+                  style={{ 
+                    position: 'absolute', 
+                    right: '12px', 
+                    top: '50%', 
+                    transform: 'translateY(-50%)', 
+                    background: 'none', 
+                    border: 'none', 
+                    color: 'var(--text-muted)', 
+                    cursor: 'pointer', 
+                    outline: 'none',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -270,12 +342,12 @@ export default function AuthForm({ onAuthSuccess }) {
               {loading ? 'Authenticating...' : 'Sign In'}
             </button>
 
-            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '24px', color: 'var(--text-muted)' }}>
+            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '28px', color: 'var(--text-muted)', fontWeight: 500 }}>
               Don't have an account?{' '}
               <button 
                 type="button" 
                 onClick={() => switchView('REGISTER')}
-                style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer', outline: 'none' }}
+                style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', outline: 'none' }}
               >
                 Sign Up
               </button>
@@ -290,57 +362,84 @@ export default function AuthForm({ onAuthSuccess }) {
           <form onSubmit={handleRegister}>
             <div className="form-group">
               <label className="form-label" htmlFor="reg-name">Full Name</label>
-              <input
-                type="text"
-                id="reg-name"
-                className="form-input"
-                placeholder="e.g. John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  id="reg-name"
+                  className="form-input"
+                  placeholder="e.g. John Doe"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="reg-email">Email Address</label>
-              <input
-                type="email"
-                id="reg-email"
-                className="form-input"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="reg-email"
+                  className="form-input"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="reg-pass">Password</label>
-              <input
-                type="password"
-                id="reg-pass"
-                className="form-input"
-                placeholder="Minimum 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                minLength={6}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  id="reg-pass"
+                  className="form-input"
+                  placeholder="Minimum 6 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  minLength={6}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }} disabled={loading}>
               {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
 
-            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '24px', color: 'var(--text-muted)' }}>
+            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '28px', color: 'var(--text-muted)', fontWeight: 500 }}>
               Already have an account?{' '}
               <button 
                 type="button" 
                 onClick={() => switchView('LOGIN')}
-                style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer', outline: 'none' }}
+                style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 700, cursor: 'pointer', outline: 'none' }}
               >
                 Sign In
               </button>
@@ -355,23 +454,32 @@ export default function AuthForm({ onAuthSuccess }) {
           <form onSubmit={handleResetRequest}>
             <div className="form-group" style={{ marginBottom: '28px' }}>
               <label className="form-label" htmlFor="reset-req-email">Registered Email</label>
-              <input
-                type="email"
-                id="reset-req-email"
-                className="form-input"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="reset-req-email"
+                  className="form-input"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
               {loading ? 'Requesting Reset...' : 'Get Verification Code'}
             </button>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginTop: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginTop: '28px', fontWeight: 600 }}>
               <button 
                 type="button" 
                 onClick={() => switchView('LOGIN')}
@@ -398,56 +506,83 @@ export default function AuthForm({ onAuthSuccess }) {
           <form onSubmit={handleResetPassword}>
             <div className="form-group">
               <label className="form-label" htmlFor="reset-email">Email Address</label>
-              <input
-                type="email"
-                id="reset-email"
-                className="form-input"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <input
+                  type="email"
+                  id="reset-email"
+                  className="form-input"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="reset-code">Verification Code</label>
-              <input
-                type="text"
-                id="reset-code"
-                className="form-input"
-                placeholder="e.g. MOCK123"
-                value={resetCode}
-                onChange={(e) => setResetCode(e.target.value)}
-                required
-                disabled={loading}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  id="reset-code"
+                  className="form-input"
+                  placeholder="e.g. MOCK123"
+                  value={resetCode}
+                  onChange={(e) => setResetCode(e.target.value)}
+                  required
+                  disabled={loading}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="reset-new-pass">New Password</label>
-              <input
-                type="password"
-                id="reset-new-pass"
-                className="form-input"
-                placeholder="Minimum 6 characters"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                disabled={loading}
-                minLength={6}
-              />
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input
+                  type="password"
+                  id="reset-new-pass"
+                  className="form-input"
+                  placeholder="Minimum 6 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  minLength={6}
+                  style={{ paddingLeft: '44px' }}
+                />
+              </div>
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }} disabled={loading}>
               {loading ? 'Updating Password...' : 'Reset Password'}
             </button>
 
-            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '24px' }}>
+            <p style={{ textAlign: 'center', fontSize: '0.85rem', marginTop: '28px' }}>
               <button 
                 type="button" 
                 onClick={() => switchView('LOGIN')}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', outline: 'none' }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', outline: 'none' }}
               >
                 Cancel and return to Sign In
               </button>

@@ -61,21 +61,20 @@ export default function Dashboard({
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="target-role">Target Role</label>
-            <select 
-              id="target-role" 
-              className="form-select"
-              value={role} 
-              onChange={(e) => setRole(e.target.value)}
-              disabled={loading}
-            >
-              <option value="Frontend Engineer">Frontend Engineer</option>
-              <option value="Backend Engineer">Backend Engineer</option>
-              <option value="Fullstack Engineer">Fullstack Engineer</option>
-              <option value="Data Scientist">Data Scientist</option>
-              <option value="Product Manager">Product Manager</option>
-              <option value="Other">Other (Custom Write-in)</option>
-            </select>
+            <label className="form-label">Target Role</label>
+            <div className="role-console">
+              {['Frontend Engineer', 'Backend Engineer', 'Fullstack Engineer', 'Data Scientist', 'Product Manager', 'Other'].map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  className={`role-badge ${role === r ? 'active' : ''}`}
+                  onClick={() => setRole(r)}
+                  disabled={loading}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
           </div>
 
           {role === 'Other' && (
