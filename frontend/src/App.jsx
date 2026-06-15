@@ -8,9 +8,9 @@ import EvaluationReport from './EvaluationReport';
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
 export default function App() {
-  // Authentication states
-  const [token, setToken] = useState(localStorage.getItem('mockmate_token') || '');
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem('mockmate_user') || 'null'));
+  // Authentication states (Hardcoded dummy values to bypass authentication in the prototype)
+  const [token, setToken] = useState('mockmate_prototype_token');
+  const [user, setUser] = useState({ name: 'Prototype Candidate', email: 'prototype@example.com' });
   
   // Navigation & Interview states
   const [currentView, setCurrentView] = useState('DASHBOARD'); // 'DASHBOARD' | 'INTERVIEW' | 'EVALUATION'
@@ -209,20 +209,12 @@ export default function App() {
             </div>
           )}
 
-          {/* Logged in User Profile welcome tag & logout */}
-          {token && user && (
+          {/* Logged in User Profile welcome tag */}
+          {user && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 500 }}>
                 Hello, {user.name.split(' ')[0]}
               </span>
-              <button 
-                onClick={handleLogout} 
-                className="btn btn-secondary" 
-                style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '6px' }}
-                title="Sign out of your session"
-              >
-                Sign Out
-              </button>
             </div>
           )}
         </div>

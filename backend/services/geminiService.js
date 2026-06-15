@@ -89,7 +89,7 @@ const generateQuestion = async (role, resumeText = "", history = []) => {
 
     // 2. Real Gemini AI Mode
     try {
-        const modelName = "gemini-1.5-flash";
+        const modelName = "gemini-2.5-flash";
         const model = genAI.getGenerativeModel({ model: modelName });
 
         // Compile prompt with context and history
@@ -223,7 +223,7 @@ The candidate displayed a strong overall technical capability and excellent prof
 
     // 2. Real Gemini AI Mode
     try {
-        const modelName = "gemini-1.5-flash";
+        const modelName = "gemini-2.5-flash";
         // Prompt with structured JSON output configuration
         const model = genAI.getGenerativeModel({ 
             model: modelName,
